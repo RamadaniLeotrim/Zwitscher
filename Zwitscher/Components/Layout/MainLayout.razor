@@ -1,16 +1,27 @@
 ﻿@inherits LayoutComponentBase
 
+@inject UserService UserService
+
 <div class="main-layout">
     <!-- Navigation -->
     <header class="navbar">
         <div class="navbar-content">
             <div class="logo-container">
                 <img src="AppIcon.png" alt="Logo" class="logo-img" />
-                <span class="logo-text">@AppName</span>
+                <span class="logo-text">@appName</span>
             </div>
             <nav class="nav-links">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/login" class="nav-link">Login</a>
+                @if (isAuthenticated)
+                {
+                    <a href="/profile" class="nav-link">Profil</a>
+                    <a href="/auth/logout" class="nav-link">Logout</a>
+                }
+                else
+                {
+                    <a href="/login" class="nav-link">Login</a>
+                }
+
                 <!-- Weitere Links nach Bedarf -->
             </nav>
         </div>
@@ -24,7 +35,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <p>&copy; @DateTime.Now.Year – @AppName. Alle Rechte vorbehalten.</p>
+            <p>&copy; @DateTime.Now.Year – @appName. Alle Rechte vorbehalten.</p>
         </div>
     </footer>
 </div>
@@ -38,5 +49,11 @@
 </div>
 
 @code {
-    private string AppName = "Zwitscher";
+    private string appName = "Zwitscher";
+    private bool isAuthenticated = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isAuthenticated = await UserService.IsAuthenticatedAsync();
+    }
 }

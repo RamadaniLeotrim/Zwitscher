@@ -3,12 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Zwitscher.Components;
 using Zwitscher.Data;
 using Zwitscher.Models;
+using Zwitscher.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddScoped<UserService>();
 
 // 1) DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

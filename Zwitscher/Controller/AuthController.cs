@@ -26,6 +26,13 @@ namespace Zwitscher.Controller
                 return Redirect("/");
             return Redirect("/login?error=1");
         }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInMgr.SignOutAsync();
+            return Redirect("/");
+        }
     }
 
 

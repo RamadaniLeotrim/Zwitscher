@@ -1,18 +1,38 @@
-﻿<!-- Pages/Home.razor -->
-@page "/"
+﻿@page "/"
 @inject NavigationManager Nav
 
 <div class="home-container">
     <section class="hero">
-        <h1>Willkommen bei Zwitscher</h1>
+        <h1>Willkommen bei Zwitscher@(isAuthenticated ? $", {userName}" : "") </h1>
         <p>Zwitscher ist deine neue Plattform, um Nachrichten zu teilen und mit anderen in Kontakt zu bleiben.</p>
-        <button class="btn-primary" @onclick="@(() => Nav.NavigateTo("/login"))">
-            Jetzt anmelden
-        </button>
+
+        @if (isAuthenticated)
+        {
+            <button class="btn-primary" @onclick="@(() => Nav.NavigateTo("/feed"))">
+                Zum Feed
+            </button>
+        }
+        else
+        {
+            <button class="btn-primary" @onclick="@(() => Nav.NavigateTo("/login"))">
+                Jetzt anmelden
+            </button>
+        }
     </section>
 </div>
- 
+
 @code 
 {
+    private bool isAuthenticated = false;
+    private string? userName = string.Empty;
 
+    protected override async Task OnInitializedAsync()
+    {
+        isAuthenticated = await UserService.IsAuthenticatedAsync();
+
+        if (isAuthenticated)
+        {
+            userName = await UserService.GetUserNameAsync();
+        }
+    }
 }
