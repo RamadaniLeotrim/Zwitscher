@@ -5,7 +5,8 @@
     <header class="navbar">
         <div class="navbar-content">
             <div class="logo-container">
-                <span class="logo-text">Ihre App</span>
+                <img src="AppIcon.png" alt="Logo" class="logo-img" />
+                <span class="logo-text">@AppName</span>
             </div>
             <nav class="nav-links">
                 <a href="/" class="nav-link">Home</a>
@@ -23,7 +24,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <p>&copy; @DateTime.Now.Year – Ihre App. Alle Rechte vorbehalten.</p>
+            <p>&copy; @DateTime.Now.Year – @AppName. Alle Rechte vorbehalten.</p>
         </div>
     </footer>
 </div>
@@ -35,3 +36,7 @@
         <a class="dismiss">✕</a>
     </div>
 </div>
+
+@code {
+    private string AppName = "Zwitscher";
+}

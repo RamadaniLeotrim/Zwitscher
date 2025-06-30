@@ -31,6 +31,17 @@
     align-items: center;
 }
 
+.logo-img {
+    width: 36px; /* Icon-Größe */
+    height: 36px; /* Icon-Größe */
+    margin-right: var(--spacing-sm);
+    object-fit: contain;
+}
+    .logo-img:hover {
+        transform: rotate(360deg);
+        transition: transform 0.5s ease-in-out;
+    }
+
 .logo-text {
     font-weight: 700;
     font-size: 1.5rem;
