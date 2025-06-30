@@ -1,0 +1,76 @@
+﻿@page "/feed"
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+
+<div class="feed-container">
+    <!-- Nachrichten-Liste (scrollbar nur hier) -->
+    <div class="feed-messages">
+        @if (messages.Count == 0)
+        {
+            <p class="empty">Noch keine Nachrichten.</p>
+        }
+        else
+        {
+            @foreach (var msg in messages)
+            {
+                <div class="message">
+                    <span class="message-user">@msg.UserName</span>
+                    <span class="message-text">@msg.Text</span>
+                    <span class="message-time">@msg.CreatedAt.ToLocalTime()</span>
+                </div>
+            }
+        }
+    </div>
+
+    <!-- Eingabe-Box -->
+    <div class="feed-input">
+        <textarea class="input-textarea"
+                  @bind="newMessage"
+                  placeholder="Schreibe eine Nachricht..."
+                  @onkeypress="HandleKeyPress"></textarea>
+        <button class="send-button" @onclick="Send">Senden</button>
+    </div>
+</div>
+
+@code {
+    // Placeholder-Model
+    record ChatMessage(string UserName, string Text, DateTime CreatedAt);
+
+    private List<ChatMessage> messages = new();
+    private string newMessage = "";
+
+    private string userName = "Leotrim";
+
+    protected override void OnInitialized()
+    {
+        // TODO: Hier echte Messages laden
+        messages = new List<ChatMessage>();
+    }
+
+    private async Task Send()
+    {
+        if (string.IsNullOrWhiteSpace(newMessage))
+            return;
+
+        // TODO: Nachricht an Service senden
+        messages.Add(new ChatMessage(
+            userName ?? "?",
+            newMessage.Trim(),
+            DateTime.UtcNow));
+
+        newMessage = "";
+        // Scroll ganz nach unten
+        await Task.Delay(50);
+        await JsRuntime.InvokeVoidAsync("scrollFeedToBottom");
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+        {
+            await Send();
+        }
+    }
+
+    [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
+}

@@ -1,0 +1,262 @@
+﻿/* Feed.razor.css */
+
+/* Feed-Container füllt den gesamten Parent (main-content) aus */
+.feed-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto; /* ganzes vertical space ausnutzen */
+    min-height: 0; /* sehr wichtig, damit das Flex-Item schrumpfen kann */
+    overflow: hidden; /* kein eigener Scroll */
+    max-width: 800px;
+    min-width: 600px;
+    margin: var(--spacing-xl) auto;
+    padding: var(--spacing-lg);
+    gap: var(--spacing-md);
+    background-color: var(--color-background);
+    border-radius: var(--border-radius-lg);
+}
+
+/* Nachrichten-Liste – der EINZIGE scrollbare Bereich */
+.feed-messages {
+    flex: 1 1 auto; /* nimmt den restlichen Platz ein */
+    min-height: 0; /* zwingt das Element, sich dem Flex-Container anzupassen */
+    overflow-y: auto; /* hier scrollen */
+    padding: var(--spacing-md);
+    background: var(--color-background-alt);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--color-gray-200);
+    box-shadow: var(--box-shadow-sm);
+    scroll-behavior: smooth;
+}
+
+    /* Scrollbar Styling */
+    .feed-messages::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .feed-messages::-webkit-scrollbar-track {
+        background: var(--color-gray-100);
+        border-radius: var(--border-radius-sm);
+    }
+
+    .feed-messages::-webkit-scrollbar-thumb {
+        background: var(--color-gray-300);
+        border-radius: var(--border-radius-sm);
+        transition: var(--transition-fast);
+    }
+
+        .feed-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--color-gray-400);
+        }
+
+/* Leerer Zustand */
+.empty {
+    text-align: center;
+    color: var(--color-text-light);
+    font-style: italic;
+    padding: var(--spacing-2xl);
+    font-size: var(--font-size-lg);
+}
+
+/* Einzelne Nachricht */
+.message {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    background: var(--color-background);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-sm);
+    transition: var(--transition-fast);
+}
+
+    .message:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--box-shadow);
+        border-left-color: var(--color-primary-dark);
+    }
+
+    .message:last-child {
+        margin-bottom: 0;
+    }
+
+.message-user {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary-dark);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.message-text {
+    color: var(--color-text);
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.message-time {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-lighter);
+    align-self: flex-end;
+    margin-top: var(--spacing-xs);
+    font-family: var(--font-mono);
+}
+
+/* Eingabe-Bereich am unteren Rand */
+.feed-input {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--color-background);
+    border-radius: var(--border-radius-lg);
+    border: 2px solid var(--color-gray-200);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition-fast);
+}
+
+    .feed-input:focus-within {
+        border-color: var(--color-primary);
+        box-shadow: var(--box-shadow-lg);
+    }
+
+/* Textarea */
+.input-textarea {
+    flex: 1;
+    min-height: 60px;
+    max-height: 120px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--border-radius);
+    font-family: var(--font-base);
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    background-color: var(--color-background);
+    resize: vertical;
+    transition: var(--transition-fast);
+    line-height: 1.5;
+}
+
+    .input-textarea:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px var(--color-primary-lighter);
+    }
+
+    .input-textarea::placeholder {
+        color: var(--color-text-lighter);
+        font-style: italic;
+    }
+
+/* Senden-Button */
+.send-button {
+    align-self: flex-end;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: var(--color-text-white);
+    border: none;
+    border-radius: var(--border-radius);
+    font-family: var(--font-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    box-shadow: var(--box-shadow-sm);
+    min-width: 80px;
+    height: fit-content;
+}
+
+    .send-button:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--box-shadow);
+        background: linear-gradient(135deg, var(--color-primary-dark), #0F7A2E);
+    }
+
+    .send-button:active {
+        transform: translateY(0);
+        box-shadow: var(--box-shadow-sm);
+    }
+
+    .send-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+    .feed-container {
+        padding: var(--spacing-sm);
+        gap: var(--spacing-sm);
+    }
+
+    .feed-messages {
+        padding: var(--spacing-sm);
+    }
+
+    .message {
+        padding: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .feed-input {
+        flex-direction: column;
+        padding: var(--spacing-sm);
+    }
+
+    .input-textarea {
+        min-height: 80px;
+    }
+
+    .send-button {
+        align-self: stretch;
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .feed-container {
+        padding: var(--spacing-xs);
+    }
+
+    .message-user {
+        font-size: var(--font-size-xs);
+    }
+
+    .message-text {
+        font-size: var(--font-size-sm);
+    }
+
+    .input-textarea {
+        font-size: var(--font-size-sm);
+    }
+
+    .send-button {
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* Animation für neue Nachrichten */
+@keyframes slideInMessage {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message {
+    animation: slideInMessage 0.3s ease-out;
+}
+
+/* Accessibility Focus */
+.send-button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}

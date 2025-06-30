@@ -13,6 +13,15 @@
 <body>
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
+
+    <script>
+        window.scrollFeedToBottom = () => {
+          const el = document.querySelector('.feed-messages');
+          if (el) {
+            el.scrollTop = el.scrollHeight;
+          }
+        };
+    </script>
 </body>
 
 </html>
