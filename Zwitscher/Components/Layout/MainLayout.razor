@@ -1,9 +1,37 @@
 ﻿@inherits LayoutComponentBase
 
-@Body
+<div class="main-layout">
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="navbar-content">
+            <div class="logo-container">
+                <span class="logo-text">Ihre App</span>
+            </div>
+            <nav class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/login" class="nav-link">Login</a>
+                <!-- Weitere Links nach Bedarf -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Seiteninhalt -->
+    <main class="main-content">
+        @Body
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; @DateTime.Now.Year – Ihre App. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+</div>
 
 <div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
+    <div class="error-content">
+        <strong>Ein unbehandelter Fehler ist aufgetreten.</strong>
+        <a href="" class="reload">Neu laden</a>
+        <a class="dismiss">✕</a>
+    </div>
 </div>
