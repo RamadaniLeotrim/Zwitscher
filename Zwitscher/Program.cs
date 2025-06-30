@@ -27,6 +27,16 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+// in Program.cs, nach builder.Services.AddIdentity<...>()
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Bei fehlender Authentifizierung hierhin umleiten:
+    options.LoginPath = "/login";
+    // Optional: wenn keine Berechtigung:
+    options.AccessDeniedPath = "/";
+});
+
+
 // 3) MVC / RazorPages / Blazor-Authentication
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();

@@ -1,0 +1,61 @@
+﻿@page "/register"
+@inject NavigationManager NavigationManager
+
+<div class="login-container">
+    <div class="form-inner">
+        <h3>Registrieren</h3>
+
+        @if (hasError)
+        {
+            <div class="text-danger" style="margin-bottom:1rem;">
+                @GetErrorMessage()
+            </div>
+        }
+
+        <form method="post" action="/auth/register">
+            <div class="form-group">
+                <label for="username">Benutzername</label>
+                <input id="username" name="username"
+                       class="input" placeholder="Benutzername" required />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Passwort</label>
+                <input id="password" name="password" type="password"
+                       class="input" placeholder="Passwort" required />
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Passwort bestätigen</label>
+                <input id="confirmPassword" name="confirmPassword" type="password"
+                       class="input" placeholder="Passwort erneut eingeben" required />
+            </div>
+
+            <button type="submit" class="login-button">Registrieren</button>
+        </form>
+    </div>
+</div>
+
+@code {
+    private bool hasError;
+    private string errorCode = "";
+
+    protected override void OnInitialized()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+        if (query.TryGetValue("error", out var code))
+        {
+            hasError = true;
+            errorCode = code;
+        }
+    }
+
+    private string GetErrorMessage() => errorCode switch
+    {
+        "validation" => "Bitte fülle alle Felder korrekt aus und gleiche Passwörter ab.",
+        "duplicate" => "Benutzername existiert bereits.",
+        "creation" => "Fehler bei der Erstellung. Bitte versuche es später erneut.",
+        _ => ""
+    };
+}

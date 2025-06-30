@@ -114,6 +114,33 @@ h3 {
         padding-left: 20px;
     }
 
+.text-danger {
+    color: var(--color-danger-dark);
+    background: var(--color-danger-light);
+    border: 1px solid var(--color-danger);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+    margin-top: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    animation: slideIn var(--transition-normal) ease-out;
+}
+
+.register-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: var(--color-primary);
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    .register-link:hover {
+        color: var(--color-primary-dark);
+        text-decoration: underline;
+    }
 /* Responsive Design */
 @media (max-width: 480px) {
     .form-inner {
@@ -131,7 +158,6 @@ h3 {
         font-size: 15px;
     }
 }
-
 /* Responsive Input-Styles */
 @media (max-width: 480px) {
     ::deep .input {
@@ -139,7 +165,6 @@ h3 {
         font-size: 15px;
     }
 }
-
 /* Animation für Form-Erscheinen */
 @keyframes fadeInUp {
     from {

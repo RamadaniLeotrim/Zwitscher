@@ -1,0 +1,136 @@
+﻿@page "/profile"
+
+@attribute [Authorize]
+
+@inject UserService UserService
+@inject UserManager<User> UserManager
+
+<div class="profile-container">
+    <div class="form-inner">
+        <h3>Profil bearbeiten</h3>
+
+        @if (isLoading)
+        {
+            <p>Lade Benutzer…</p>
+        }
+        else if (user is null)
+        {
+            <p class="text-danger">Benutzer nicht gefunden.</p>
+        }
+        else
+        {
+            <EditForm Model="editModel" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <!-- Benutzername -->
+                <div class="form-group">
+                    <label for="username">Benutzername</label>
+                    <InputText id="username"
+                               @bind-Value="editModel.UserName"
+                               class="input"
+                               placeholder="Neuer Benutzername" />
+                </div>
+
+                <!-- Passwort -->
+                <div class="form-group">
+                    <label for="password">Neues Passwort</label>
+                    <InputText id="password"
+                               @bind-Value="editModel.Password"
+                               type="password"
+                               class="input"
+                               placeholder="Neues Passwort (leer = unverändert)" />
+                </div>
+
+                <button type="submit" class="login-button">Speichern</button>
+
+                @if (!string.IsNullOrEmpty(statusMessage))
+                {
+                    <p class="@statusClass">@statusMessage</p>
+                }
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    private User? user;
+    private bool isLoading = true;
+    private EditModel editModel = new();
+    private string statusMessage = "";
+    private string statusClass = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserService.GetUserAsync();
+        if (user != null)
+        {
+            editModel.UserName = user.UserName!;
+            editModel.Password = "";
+        }
+        isLoading = false;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var messages = new List<string>();
+        bool hasError = false;
+
+        // 1) Benutzername aktualisieren (wenn geändert)
+        if (editModel.UserName != user?.UserName)
+        {
+            // Unique-Check
+            var existing = await UserManager.FindByNameAsync(editModel.UserName);
+            if (existing != null && existing.Id != user!.Id)
+            {
+                messages.Add("Dieser Benutzername ist bereits vergeben.");
+                hasError = true;
+            }
+            else
+            {
+                user!.UserName = editModel.UserName!;
+                var uRes = await UserManager.UpdateAsync(user);
+                if (uRes.Succeeded)
+                    messages.Add("Benutzername erfolgreich aktualisiert.");
+                else
+                {
+                    messages.AddRange(uRes.Errors.Select(e => e.Description));
+                    hasError = true;
+                }
+            }
+        }
+
+        // 2) Passwort aktualisieren (wenn nicht leer)
+        if (!string.IsNullOrWhiteSpace(editModel.Password))
+        {
+            // Reset-Token erzeugen und Passwort zurücksetzen
+            var token = await UserManager.GeneratePasswordResetTokenAsync(user!);
+            var pRes = await UserManager.ResetPasswordAsync(user!, token, editModel.Password!);
+            if (pRes.Succeeded)
+                messages.Add("Passwort erfolgreich aktualisiert.");
+            else
+            {
+                messages.AddRange(pRes.Errors.Select(e => e.Description));
+                hasError = true;
+            }
+        }
+
+        // 3) Ergebnis-Status setzen
+        if (!messages.Any())
+        {
+            statusMessage = "Keine Änderungen vorgenommen.";
+            statusClass = "text-info";
+        }
+        else if (hasError)
+        {
+            statusMessage = string.Join(" ", messages);
+            statusClass = "text-danger";
+        }
+        else
+        {
+            statusMessage = string.Join(" ", messages);
+            statusClass = "text-success";
+        }
+    }
+
+}

@@ -1,0 +1,383 @@
+﻿/* Register.razor.css */
+
+.login-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-background-alt) 0%, var(--color-background-secondary) 100%);
+    padding: var(--spacing-md);
+    box-sizing: border-box;
+}
+
+.form-inner {
+    background: var(--color-background);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--box-shadow-xl);
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid var(--color-gray-200);
+    position: relative;
+    overflow: hidden;
+}
+
+    .form-inner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-tertiary) 100%);
+    }
+
+    .form-inner h3 {
+        color: var(--color-text-dark);
+        font-family: var(--font-heading);
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        margin: 0 0 var(--spacing-lg) 0;
+        text-align: center;
+        position: relative;
+    }
+
+        .form-inner h3::after {
+            content: '';
+            position: absolute;
+            bottom: var(--spacing-sm);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            border-radius: var(--border-radius-full);
+        }
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+    .form-group label {
+        display: block;
+        color: var(--color-text);
+        font-weight: var(--font-weight-medium);
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--spacing-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+::deep .input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid var(--color-gray-200);
+    border-radius: var(--border-radius-lg);
+    font-size: var(--font-size-base);
+    font-family: var(--font-base);
+    background: var(--color-background);
+    color: var(--color-text);
+    transition: all var(--transition-normal);
+    box-sizing: border-box;
+}
+
+/* Native input styling without ::deep */
+.input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid var(--color-gray-200);
+    border-radius: var(--border-radius-lg);
+    font-size: var(--font-size-base);
+    font-family: var(--font-base);
+    background: var(--color-background);
+    color: var(--color-text);
+    transition: all var(--transition-normal);
+    box-sizing: border-box;
+}
+
+    ::deep .input:focus,
+    .input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        transform: translateY(-1px);
+    }
+
+    ::deep .input:hover,
+    .input:hover {
+        border-color: var(--color-gray-300);
+    }
+
+    ::deep .input::placeholder,
+    .input::placeholder {
+        color: var(--color-text-lighter);
+        font-style: italic;
+    }
+
+    /* Spezielle Styling für Date Input */
+    .input[type="date"] {
+        position: relative;
+        cursor: pointer;
+    }
+
+        .input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+
+        .input[type="date"]::-webkit-inner-spin-button,
+        .input[type="date"]::-webkit-clear-button {
+            display: none;
+        }
+
+        .input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+            padding: 0;
+        }
+
+        .input[type="date"]::-webkit-datetime-edit-text {
+            color: var(--color-text-lighter);
+            padding: 0 0.3em;
+        }
+
+        .input[type="date"]::-webkit-datetime-edit-month-field,
+        .input[type="date"]::-webkit-datetime-edit-day-field,
+        .input[type="date"]::-webkit-datetime-edit-year-field {
+            color: var(--color-text);
+            padding: 0 0.1em;
+        }
+
+        .input[type="date"]:focus::-webkit-datetime-edit-text {
+            color: var(--color-primary);
+        }
+
+.login-button {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-text-white);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-heading);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    margin-top: var(--spacing-md);
+}
+
+    .login-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left var(--transition-slow);
+    }
+
+    .login-button:hover {
+        background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+        transform: translateY(-2px);
+        box-shadow: var(--box-shadow-lg);
+    }
+
+        .login-button:hover::before {
+            left: 100%;
+        }
+
+    .login-button:active {
+        transform: translateY(0);
+        box-shadow: var(--box-shadow-sm);
+    }
+
+    .login-button:disabled {
+        background: var(--color-gray-300);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+        .login-button:disabled::before {
+            display: none;
+        }
+
+/* Error Messages */
+.text-danger {
+    color: var(--color-danger-dark);
+    background: var(--color-danger-light);
+    border: 1px solid var(--color-danger);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+    font-size: var(--font-size-sm);
+    animation: slideIn var(--transition-normal) ease-out;
+}
+
+/* Form Validation States */
+.input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input:valid:not(:focus):not(:placeholder-shown) {
+    border-color: var(--color-success);
+}
+
+/* Password Strength Indicator (optional styling) */
+.password-requirements {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-lighter);
+    margin-top: var(--spacing-xs);
+    padding-left: var(--spacing-sm);
+}
+
+    .password-requirements ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .password-requirements li {
+        margin-bottom: 2px;
+        position: relative;
+        padding-left: var(--spacing-md);
+    }
+
+        .password-requirements li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--color-gray-400);
+        }
+
+        .password-requirements li.valid::before {
+            content: '✓';
+            color: var(--color-success);
+        }
+
+/* Loading State */
+.login-container p {
+    color: var(--color-text-light);
+    font-size: var(--font-size-base);
+    text-align: center;
+    margin: var(--spacing-md) 0;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.form-inner {
+    animation: fadeIn var(--transition-slow) ease-out;
+}
+
+/* Focus States für bessere Accessibility */
+.form-group:focus-within label {
+    color: var(--color-primary);
+    transition: color var(--transition-fast);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-container {
+        padding: var(--spacing-sm);
+    }
+
+    .form-inner {
+        padding: var(--spacing-lg);
+        max-width: 100%;
+    }
+
+        .form-inner h3 {
+            font-size: var(--font-size-xl);
+        }
+
+    .form-group {
+        margin-bottom: var(--spacing-sm);
+    }
+
+    ::deep .input,
+    .input {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-sm);
+    }
+
+    .login-button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .form-inner {
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-lg);
+    }
+
+        .form-inner h3 {
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--spacing-md);
+        }
+
+    .form-group label {
+        font-size: var(--font-size-xs);
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .input {
+        border-width: 3px;
+    }
+
+        .input:focus {
+            border-width: 3px;
+            box-shadow: 0 0 0 2px var(--color-primary);
+        }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .input,
+    .login-button,
+    .form-inner {
+        transition: none;
+        animation: none;
+    }
+
+        .login-button::before {
+            display: none;
+        }
+}
