@@ -3,27 +3,48 @@
 
 <div class="login-container">
     <div class="form-inner">
-        <h3>Login</h3>
-        <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+        <h3>Anmelden</h3>
+
+        @if (hasError)
+        {
+            <div class="text-danger" style="margin-bottom:1rem;">
+                Ungültiger Benutzername oder Passwort.
+            </div>
+        }
+
+        <!-- klassisches HTML-Formular -->
+        <form method="post" action="/auth/login">
             <div class="form-group">
                 <label for="username">Benutzername</label>
-                <InputText id="username" @bind-Value="loginModel.Username" class="input" placeholder="Benutzername eingeben" />
+                <input id="username"
+                       name="username"
+                       class="input"
+                       placeholder="Benutzername eingeben"
+                       required />
             </div>
+
             <div class="form-group">
                 <label for="password">Passwort</label>
-                <InputText id="password" @bind-Value="loginModel.Password" type="password" class="input" placeholder="Passwort eingeben" />
+                <input id="password"
+                       name="password"
+                       type="password"
+                       class="input"
+                       placeholder="Passwort eingeben"
+                       required />
             </div>
+
             <button type="submit" class="login-button">Anmelden</button>
-        </EditForm>
+        </form>
     </div>
 </div>
 
 @code {
-    private LoginModel loginModel = new();
-    private void HandleLogin()
+    // Prüfe, ob in der URL ?error=1 steht
+    private bool hasError;
+    protected override void OnInitialized()
     {
-        NavigationManager.NavigateTo("/home");
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+        hasError = query.ContainsKey("error");
     }
 }
