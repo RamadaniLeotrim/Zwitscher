@@ -1,0 +1,29 @@
+﻿@page "/login"
+@inject NavigationManager NavigationManager
+
+<div class="login-container">
+    <div class="form-inner">
+        <h3>Login</h3>
+        <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label for="username">Benutzername</label>
+                <InputText id="username" @bind-Value="loginModel.Username" class="input" placeholder="Benutzername eingeben" />
+            </div>
+            <div class="form-group">
+                <label for="password">Passwort</label>
+                <InputText id="password" @bind-Value="loginModel.Password" type="password" class="input" placeholder="Passwort eingeben" />
+            </div>
+            <button type="submit" class="login-button">Anmelden</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private LoginModel loginModel = new();
+    private void HandleLogin()
+    {
+        NavigationManager.NavigateTo("/home");
+    }
+}
