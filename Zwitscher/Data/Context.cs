@@ -12,6 +12,8 @@ namespace Zwitscher.Data
             : base(opts)
         { }
 
+        public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -19,6 +21,12 @@ namespace Zwitscher.Data
             builder.Entity<User>()
                    .HasIndex(u => u.UserName)
                    .IsUnique();
+
+            builder.Entity<ChatMessage>()
+                   .HasOne(cm => cm.User)
+                   .WithMany() // falls User.NavigationCollection nicht existiert
+                   .HasForeignKey(cm => cm.UserId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 

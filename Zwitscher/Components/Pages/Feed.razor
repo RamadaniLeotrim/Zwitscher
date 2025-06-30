@@ -1,6 +1,13 @@
 ﻿@page "/feed"
 @attribute [Authorize]
+@using Microsoft.AspNetCore.SignalR.Client
+@using Zwitscher.Models
 @inject NavigationManager NavigationManager
+@inject ChatService ChatService
+@inject UserService UserService
+@inject IJSRuntime JsRuntime
+
+@implements IAsyncDisposable
 
 <div class="feed-container">
     <!-- Nachrichten-Liste (scrollbar nur hier) -->
@@ -14,9 +21,9 @@
             @foreach (var msg in messages)
             {
                 <div class="message">
-                    <span class="message-user">@msg.UserName</span>
+                    <span class="message-user">@msg.User?.UserName</span>
                     <span class="message-text">@msg.Text</span>
-                    <span class="message-time">@msg.CreatedAt.ToLocalTime()</span>
+                    <span class="message-time">@msg.CreatedAt.ToLocalTime():HH:mm</span>
                 </div>
             }
         }
@@ -33,34 +40,72 @@
 </div>
 
 @code {
-    // Placeholder-Model
-    record ChatMessage(string UserName, string Text, DateTime CreatedAt);
-
     private List<ChatMessage> messages = new();
     private string newMessage = "";
+    private HubConnection? hubConnection;
+    private User? currentUser;
+    private string? connectionId;
 
-    private string userName = "Leotrim";
-
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        // TODO: Hier echte Messages laden
-        messages = new List<ChatMessage>();
+        // Redirect, falls nicht eingeloggt
+        if (!await UserService.IsAuthenticatedAsync())
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
+        currentUser = await UserService.GetUserAsync();
+        if (currentUser == null)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
+        // letzte Nachrichten laden
+        messages = (await ChatService.GetLatestMessagesAsync()).ToList();
+
+        // SignalR-Verbindung aufbauen
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
+            .WithAutomaticReconnect()
+            .Build();
+
+        // Callback für eingehende Nachrichten
+        hubConnection.On<string, string, DateTime>(
+            "ReceiveMessage",
+            (userName, text, createdAt) =>
+            {
+                var msg = new ChatMessage
+                    {
+                        User = new User { UserName = userName },
+                        Text = text,
+                        CreatedAt = createdAt
+                    };
+                messages.Add(msg);
+                InvokeAsync(StateHasChanged);
+                _ = JsRuntime.InvokeVoidAsync("scrollFeedToBottom");
+            });
+
+        await hubConnection.StartAsync();
+
+        connectionId = hubConnection.ConnectionId;
+
+        // initial scroll to bottom
+        await Task.Delay(50);
+        await JsRuntime.InvokeVoidAsync("scrollFeedToBottom");
     }
 
     private async Task Send()
     {
-        if (string.IsNullOrWhiteSpace(newMessage))
+        if (string.IsNullOrWhiteSpace(newMessage) || currentUser == null)
             return;
 
-        // TODO: Nachricht an Service senden
-        messages.Add(new ChatMessage(
-            userName ?? "?",
-            newMessage.Trim(),
-            DateTime.UtcNow));
-
+        // Nachricht in DB und per ChatService (broadcast inkl.) speichern
+        var msg = await ChatService.SendMessageAsync(currentUser.Id, newMessage.Trim(), connectionId);
+        messages.Add(msg);
         newMessage = "";
-        // Scroll ganz nach unten
-        await Task.Delay(50);
+
         await JsRuntime.InvokeVoidAsync("scrollFeedToBottom");
     }
 
@@ -72,5 +117,11 @@
         }
     }
 
-    [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
 }

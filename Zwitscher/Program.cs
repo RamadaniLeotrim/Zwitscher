@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Zwitscher.Components;
 using Zwitscher.Data;
+using Zwitscher.Hubs;
 using Zwitscher.Models;
 using Zwitscher.Services;
 
@@ -12,6 +13,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ChatService>();
 
 // 1) DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -71,7 +73,7 @@ async Task SeedRolesAndAdminAsync(IServiceProvider services)
     }
 }
 
-
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -105,6 +107,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chathub");
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
