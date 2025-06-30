@@ -1,7 +1,32 @@
-﻿@page "/"
+﻿<!-- Pages/Home.razor -->
+@page "/"
+@inject NavigationManager Nav
 
-<PageTitle>Home</PageTitle>
+<div class="home-container">
+    <section class="hero">
+        <h1>Willkommen bei Zwitscher</h1>
+        <p>Zwitscher ist deine neue Plattform, um Nachrichten zu teilen und mit anderen in Kontakt zu bleiben.</p>
+        <button class="btn-primary" @onclick="@(() => Nav.NavigateTo("/login"))">
+            Jetzt anmelden
+        </button>
+    </section>
 
-<h1>Hello, world!</h1>
+    <section class="features">
+        <h2>Funktionen</h2>
+        <ul>
+            <li>Schnelle Kurznachrichten</li>
+            <li>Folge Freunden und erhalte Updates</li>
+            <li>Privater und öffentlicher Austausch</li>
+        </ul>
+    </section>
 
-Welcome to your new app.
+    <section class="about">
+        <h2>Über Zwitscher</h2>
+        <p>Unsere Mission ist es, Kommunikation einfach und direkt zu gestalten.</p>
+    </section>
+</div>
+ 
+@code 
+{
+
+}
