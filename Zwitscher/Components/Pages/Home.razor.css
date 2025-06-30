@@ -7,6 +7,7 @@
     padding: var(--spacing-lg);
     font-family: var(--font-base);
     color: var(--color-text);
+    height: 50vh;
 }
 
 .hero {
@@ -41,22 +42,3 @@
         background-color: var(--color-primary-dark);
     }
 
-.features, .about {
-    margin-bottom: var(--spacing-xl);
-}
-
-    .features h2, .about h2 {
-        font-size: var(--font-size-2xl);
-        margin-bottom: var(--spacing-sm);
-        color: var(--color-secondary-dark);
-    }
-
-    .features ul {
-        list-style: disc inside;
-        color: var(--color-text);
-    }
-
-    .about p {
-        line-height: 1.6;
-        color: var(--color-text);
-    }
